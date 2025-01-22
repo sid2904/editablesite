@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editable Text</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #editableText {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Editable Text</h1>
+  <p contenteditable="true" id="editableText">Edit this text!</p>
+  <script>
+    // Firebase config (Replace with your Firebase credentials)
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      databaseURL: "YOUR_DATABASE_URL",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database(app);
+
+    const textElement = document.getElementById("editableText");
+
+    // Load saved text from Firebase
+    const textRef = db.ref("editableText");
+    textRef.on("value", (snapshot) => {
+      textElement.innerText = snapshot.val() || "Edit this text!";
+    });
+
+    // Save text to Firebase on changes
+    textElement.addEventListener("input", () => {
+      textRef.set(textElement.innerText);
+    });
+  </script>
+</body>
+</html>
